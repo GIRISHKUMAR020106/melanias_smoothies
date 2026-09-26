@@ -29,6 +29,18 @@ cnx = st.connection("snowflake")
 session = cnx.session()
 
 
+# Show the Snowflake role used by Streamlit Cloud
+
+current_role = session.sql(
+    "SELECT CURRENT_ROLE()"
+).collect()[0][0]
+
+st.write(
+    "Current Snowflake role:",
+    current_role
+)
+
+
 # Get fruit options from Snowflake
 
 my_dataframe = session.table(
