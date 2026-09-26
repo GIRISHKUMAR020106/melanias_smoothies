@@ -11,7 +11,7 @@ st.write(
 name_on_order = st.text_input('Name on Smoothie:')
 st.write('The name on your Smoothie will be:', name_on_order)
 
-# Connect to Snowflake via st.connection
+# Streamlit Community Cloud Connection
 cnx = st.connection("snowflake")
 session = cnx.session()
 
@@ -29,15 +29,16 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
 
-    # Explicitly include order_filled = false to avoid NULL default issues
-    my_insert_stmt = f"""insert into smoothies.public.orders(ingredients, name_on_order, order_filled)
-            values ('{ingredients_string}', '{name_on_order}', false)"""
+    clean_name = name_on_order.replace("'", "''") if name_on_order else ""
+
+    my_insert_stmt = f"""insert into smoothies.public.orders(ingredients, name_on_order)
+            values ('{ingredients_string}', '{clean_name}')"""
 
     time_to_insert = st.button('Submit Order')
 
     if time_to_insert:
         if name_on_order:
             session.sql(my_insert_stmt).collect()
-            st.success(f'Your Smoothie is ordered, {name_on_order}!', icon="✅")
+            st.success('Your Smoothie is ordered, ' + name_on_order + '!', icon="✅")
         else:
             st.error("Please enter a name on the Smoothie before submitting!")
