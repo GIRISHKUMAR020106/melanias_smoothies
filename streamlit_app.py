@@ -29,13 +29,12 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
 
-    # Correct table insertion matching Snowflake workshop specs
-    my_insert_stmt = f"""insert into smoothies.public.orders(ingredients, name_on_order)
-            values ('{ingredients_string}', '{name_on_order}')"""
+    # Explicitly include order_filled = false to avoid NULL default issues
+    my_insert_stmt = f"""insert into smoothies.public.orders(ingredients, name_on_order, order_filled)
+            values ('{ingredients_string}', '{name_on_order}', false)"""
 
     time_to_insert = st.button('Submit Order')
 
-    # EVERYTHING execution-related MUST stay strictly inside this IF block
     if time_to_insert:
         if name_on_order:
             session.sql(my_insert_stmt).collect()
