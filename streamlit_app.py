@@ -29,15 +29,16 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
 
-    clean_name = name_on_order.replace("'", "''") if name_on_order else ""
+    # Correct table insertion matching Snowflake workshop specs
     my_insert_stmt = f"""insert into smoothies.public.orders(ingredients, name_on_order)
-            values ('{ingredients_string}', '{clean_name}')"""
+            values ('{ingredients_string}', '{name_on_order}')"""
 
     time_to_insert = st.button('Submit Order')
 
+    # EVERYTHING execution-related MUST stay strictly inside this IF block
     if time_to_insert:
-        if not name_on_order:
-            st.error("Please enter a name on the Smoothie before submitting!")
-        else:
+        if name_on_order:
             session.sql(my_insert_stmt).collect()
             st.success(f'Your Smoothie is ordered, {name_on_order}!', icon="✅")
+        else:
+            st.error("Please enter a name on the Smoothie before submitting!")
