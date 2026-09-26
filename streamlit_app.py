@@ -112,3 +112,10 @@ if ingredients_list:
             st.error(
                 "Please enter a name on the Smoothie before submitting!"
             )
+import requests
+
+smoothiefruit_response = requests.get(
+    "https://my.smoothiefruit.com/api/fruit/watermelon"
+)
+
+st.text(smoothiefruit_response)
