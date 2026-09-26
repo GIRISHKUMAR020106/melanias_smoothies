@@ -29,11 +29,17 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
 
-    my_insert_stmt = """ insert into smoothies.public.orders(ingredients, name_on_order)
-            values ('""" + ingredients_string + """', '""" + name_on_order + """')"""
+    # Construct insert statement with escaped single quotes
+    clean_name = name_on_order.replace("'", "''") if name_on_order else ""
+    
+    my_insert_stmt = f"""insert into smoothies.public.orders(ingredients, name_on_order)
+            values ('{ingredients_string}', '{clean_name}')"""
 
     time_to_insert = st.button('Submit Order')
 
     if time_to_insert:
-        session.sql(my_insert_stmt).collect()
-        st.success('Your Smoothie is ordered, ' + name_on_order + '!', icon="✅")
+        if not name_on_order:
+            st.error("Please enter a name on the Smoothie before submitting!")
+        else:
+            session.sql(my_insert_stmt).collect()
+            st.success(f'Your Smoothie is ordered, {name_on_order}!', icon="✅")
