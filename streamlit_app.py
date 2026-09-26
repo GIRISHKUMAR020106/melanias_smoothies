@@ -115,35 +115,10 @@ if ingredients_list:
             )
 
 
-# Bring data into the app via API
+# New section to display SmoothieFruit nutrition information
 
-st.write("### SmoothieFruit API Test")
+smoothiefruit_response = requests.get(
+    "https://my.smoothiefruit.com/api/fruit/watermelon"
+)
 
-try:
-
-    smoothiefruit_response = requests.get(
-        "https://my.smoothiefruit.com/api/fruit/watermelon",
-        verify=False,
-        timeout=10
-    )
-
-    st.text(smoothiefruit_response)
-
-    if smoothiefruit_response.ok:
-
-        st.write(
-            smoothiefruit_response.json()
-        )
-
-except requests.exceptions.SSLError:
-
-    st.warning(
-        "The SmoothieFruit API is currently unavailable "
-        "because its HTTPS connection cannot be established."
-    )
-
-except requests.exceptions.RequestException:
-
-    st.warning(
-        "The SmoothieFruit API is currently unavailable."
-    )
+st.text(smoothiefruit_response)
