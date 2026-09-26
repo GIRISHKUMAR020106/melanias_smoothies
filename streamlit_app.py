@@ -117,9 +117,46 @@ if ingredients_list:
 
 # Bring data into the app via API
 
-smoothiefruit_response = requests.get(
-    "https://my.smoothiefruit.com/api/fruit/watermelon",
-    verify=False
-)
+st.write("### SmoothieFruit API Test")
 
-st.text(smoothiefruit_response)
+try:
+
+    smoothiefruit_response = requests.get(
+        "https://my.smoothiefruit.com/api/fruit/watermelon",
+        verify=False,
+        timeout=30
+    )
+
+    st.write("API Status Code:")
+
+    st.write(
+        smoothiefruit_response.status_code
+    )
+
+    st.write("API Response:")
+
+    st.text(
+        smoothiefruit_response.text
+    )
+
+
+except requests.exceptions.SSLError as e:
+
+    st.error(
+        "SSL connection to the SmoothieFruit API failed."
+    )
+
+    st.code(
+        str(e)
+    )
+
+
+except requests.exceptions.RequestException as e:
+
+    st.error(
+        "The SmoothieFruit API request failed."
+    )
+
+    st.code(
+        str(e)
+    )
