@@ -124,39 +124,26 @@ try:
     smoothiefruit_response = requests.get(
         "https://my.smoothiefruit.com/api/fruit/watermelon",
         verify=False,
-        timeout=30
+        timeout=10
     )
 
-    st.write("API Status Code:")
+    st.text(smoothiefruit_response)
 
-    st.write(
-        smoothiefruit_response.status_code
+    if smoothiefruit_response.ok:
+
+        st.write(
+            smoothiefruit_response.json()
+        )
+
+except requests.exceptions.SSLError:
+
+    st.warning(
+        "The SmoothieFruit API is currently unavailable "
+        "because its HTTPS connection cannot be established."
     )
 
-    st.write("API Response:")
+except requests.exceptions.RequestException:
 
-    st.text(
-        smoothiefruit_response.text
-    )
-
-
-except requests.exceptions.SSLError as e:
-
-    st.error(
-        "SSL connection to the SmoothieFruit API failed."
-    )
-
-    st.code(
-        str(e)
-    )
-
-
-except requests.exceptions.RequestException as e:
-
-    st.error(
-        "The SmoothieFruit API request failed."
-    )
-
-    st.code(
-        str(e)
+    st.warning(
+        "The SmoothieFruit API is currently unavailable."
     )
