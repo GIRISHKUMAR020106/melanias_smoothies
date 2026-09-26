@@ -1,9 +1,6 @@
 # Import Python packages
 
 import streamlit as st
-
-from snowflake.snowpark.context import get_active_session
-
 from snowflake.snowpark.functions import col
 
 
@@ -26,9 +23,10 @@ st.write(
 )
 
 
-# Get the active Snowflake session
+# Connect to Snowflake
 
-session = get_active_session()
+cnx = st.connection("snowflake")
+session = cnx.session()
 
 
 # Get fruit options from Snowflake
@@ -61,7 +59,11 @@ if ingredients_list:
 
     # Escape apostrophes in the name
 
-    clean_name = name_on_order.replace("'", "''")
+    clean_name = (
+        name_on_order.replace("'", "''")
+        if name_on_order
+        else ""
+    )
 
 
     # SQL statement to insert the order
