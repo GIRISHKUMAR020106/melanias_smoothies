@@ -1,6 +1,7 @@
 # Import Python packages
 
 import streamlit as st
+import requests
 from snowflake.snowpark.functions import col
 
 
@@ -112,10 +113,13 @@ if ingredients_list:
             st.error(
                 "Please enter a name on the Smoothie before submitting!"
             )
-import requests
+
+
+# Bring data into the app via API
 
 smoothiefruit_response = requests.get(
-    "https://my.smoothiefruit.com/api/fruit/watermelon"
+    "https://my.smoothiefruit.com/api/fruit/watermelon",
+    verify=False
 )
 
 st.text(smoothiefruit_response)
